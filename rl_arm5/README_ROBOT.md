@@ -14,7 +14,7 @@ Thư mục này là mã của nhóm RL (repo gốc `uvnb/rl_arm5`, cùng `uvnb/d
 | `ros2_ws/src/assarm_common/` | FK, cấu hình miền train (`config.py`), bộ dựng quan sát 28 chiều cho SAC, script gắp |
 | `ros2_ws/src/assarm_description/`, `assarm_gazebo/` | URDF/mesh, mô phỏng Gazebo |
 | `ros2_ws/src/assarm_rl_env/`, `assarm_rl_train/` | môi trường RL và script train SAC (Stage A, B, B+) |
-| `models/stage_b_plus_final.zip` | model SAC đã train (SB3 2.8, PyTorch 2.11, Python 3.10). Replay buffer không có trong repo |
+| `models/stage_b_plus_final.zip`, `models/stage_b_plus/best_model.zip` | model SAC Stage B+ đã train: bản cuối và bản tốt nhất lúc đánh giá (SB3 2.8, PyTorch 2.11, Python 3.10). Replay buffer (121 MB) không có trong repo |
 | `redme.md`, `rl_recommendation_v5_0.md` | ghi chú gốc của nhóm RL (đường dẫn trong đó là máy của nhóm) |
 
 ## 1. Phần cứng và firmware
