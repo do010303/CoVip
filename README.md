@@ -30,7 +30,20 @@ Trạng thái (2026-11-04): đã gắp thật trụ xanh ⌀50×100 mm trên Pi 
 | 320 | ~30 fps; còn 7–18 fps khi đang khớp trụ 3D |
 | 640 | ~8 fps |
 
-Train lại: dataset không nằm trong repo. Có dataset thì đặt vào `perception/datasets/objects4/`, rồi chạy `python perception/scripts/train_objects.py [--device cpu]`.
+Train lại: tải dataset ở Releases (bên dưới) vào `perception/datasets/objects4/`, rồi chạy `python perception/scripts/train_objects.py [--device cpu]`.
+
+### Tải thêm (GitHub Releases, bản `v0.1`)
+
+Hai file không để trong git vì quá nặng:
+
+| File | Nội dung | Cách dùng |
+|---|---|---|
+| `covip_dataset_objects4.zip` (407 MB) | dataset 4 vật đã gán nhãn: `images/`, `labels/` (YOLO-seg), `data.yaml`, `preview/` | `cd perception && unzip covip_dataset_objects4.zip` → `perception/datasets/objects4/` |
+| `rl_sac_stage_b_plus_training.zip` (69 MB) | replay buffer, `latest_model.zip`, `tb_logs` của SAC Stage B+; chỉ cần khi train tiếp | `cd rl_arm5 && unzip rl_sac_stage_b_plus_training.zip` |
+
+```bash
+wget https://github.com/do010303/CoVip/releases/download/v0.1/covip_dataset_objects4.zip
+```
 
 ## 2. Phần cứng
 
