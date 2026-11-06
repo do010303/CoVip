@@ -1,0 +1,33 @@
+# Controller config cho RL training
+# Dùng JointGroupPositionController (JGPC) thay JointTrajectoryController (JTC)
+# JGPC nhận position trực tiếp → khớp firmware ESP32 (nội suy 5 lệnh con 20ms)
+# Xem rl_recommendation_v5_0.md mục 4.6
+
+controller_manager:
+  ros__parameters:
+    update_rate: 100
+    use_sim_time: true
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    # JGPC cho 4 khớp tay — RL gửi position trực tiếp qua topic
+    arm_position_controller:
+      type: position_controllers/JointGroupPositionController
+
+    # JGPC cho gripper — script gửi position trực tiếp
+    gripper_position_controller:
+      type: position_controllers/JointGroupPositionController
+
+arm_position_controller:
+  ros__parameters:
+    joints:
+      - Revolute_Joint_1
+      - Revolute_Joint_2
+      - Revolute_Joint_3
+      - Revolute_Joint_4
+
+gripper_position_controller:
+  ros__parameters:
+    joints:
+      - Revolute_Joint_Active

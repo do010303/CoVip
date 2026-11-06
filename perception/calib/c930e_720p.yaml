@@ -1,0 +1,11 @@
+siyi_rtsp_publisher:
+  ros__parameters:
+    image_width: 1280
+    image_height: 720
+
+    camera_fx: 771.51488
+    camera_fy: 768.17328
+    camera_cx: 639.08927
+    camera_cy: 363.33995
+
+    camera_d: [0.041574, -0.102562, 0.000000, 0.000000, 0.000000]

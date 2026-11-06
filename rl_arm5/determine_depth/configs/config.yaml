@@ -1,0 +1,82 @@
+calibration:
+  calibration_file: configs/camera_calibration.yaml
+  chessboard_size:
+  - 7
+  - 10
+  image_dir: calibration/images
+  square_size_mm: 24.0
+camera:
+  device_index: 0
+  fps: 30
+  frame_height: 480
+  frame_width: 640
+  use_threaded_stream: true
+distance_tuning:
+  offset_m: 0.0
+  scale: 1.0
+filter:
+  enabled: true
+  filter_type: moving_average
+  measurement_noise: 0.05
+  process_noise: 0.01
+  window_size: 5
+hand_eye:
+  forward_offset_m: 0.1205
+  lateral_offset_m: 0.008
+  z_cam_world: 0.5249
+local_stream:
+  enabled: true
+  host: 0.0.0.0
+  jpeg_quality: 65
+  port: 8080
+  stream_fps: 15
+performance:
+  max_fps: 30
+  opencv_threads: 1
+  target_cpu_core: 1
+segmentation:
+  blue_lower:
+  - 90
+  - 45
+  - 40
+  blue_upper:
+  - 135
+  - 255
+  - 255
+  blur_kernel: 5
+  color_mode: blue
+  hsv_lower:
+  - 95
+  - 90
+  - 50
+  hsv_upper:
+  - 130
+  - 255
+  - 255
+  morph_kernel: 5
+  red_lower1:
+  - 0
+  - 70
+  - 50
+  red_lower2:
+  - 165
+  - 70
+  - 50
+  red_upper1:
+  - 10
+  - 255
+  - 255
+  red_upper2:
+  - 180
+  - 255
+  - 255
+serial:
+  baudrate: 115200
+  enabled: false
+  format: string
+  port: /dev/ttyUSB0
+  send_rate_hz: 30
+target_object:
+  d_real_m: 0.05
+  h_real_m: 0.1
+  min_contour_area: 1000

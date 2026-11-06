@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<robot name="assarm" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Thay cho assarm.trans (ros_control cua ROS 1). Co the xoa file .trans cu. -->
+
+  <xacro:macro name="arm_joint" params="name lo hi">
+    <joint name="${name}">
+      <command_interface name="position">
+        <param name="min">${lo}</param>
+        <param name="max">${hi}</param>
+      </command_interface>
+      <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+  </xacro:macro>
+
+  <!-- Khop mimic theo mau tai lieu gz_ros2_control (nhanh humble).
+       Neu controller_manager bao loi interface o cac khop nay: xoa dong <command_interface name="position"/>. -->
+  <xacro:macro name="mimic_joint" params="name multiplier">
+    <joint name="${name}">
+      <param name="mimic">Revolute_Joint_Active</param>
+      <param name="multiplier">${multiplier}</param>
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+  </xacro:macro>
+
+  <ros2_control name="GazeboSimSystem" type="system">
+    <hardware>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+    </hardware>
+
+    <xacro:arm_joint name="Revolute_Joint_1" lo="-1.570796" hi="1.570796"/>
+    <xacro:arm_joint name="Revolute_Joint_2" lo="-1.570796" hi="1.570796"/>
+    <xacro:arm_joint name="Revolute_Joint_3" lo="-1.570796" hi="1.570796"/>
+    <xacro:arm_joint name="Revolute_Joint_4" lo="-1.570796" hi="1.570796"/>
+
+    <!-- Kep: chi dieu khien khop chu dong; 3 khop con lai di theo (mimic) -->
+    <xacro:arm_joint name="Revolute_Joint_Active" lo="0.0" hi="1.570796"/>
+
+    <xacro:mimic_joint name="Revolute_Joint_Passive"     multiplier="-1.0"/>
+    <xacro:mimic_joint name="Revolute_Joint_5"           multiplier="1.0"/>
+    <xacro:mimic_joint name="Revolute_Joint_8"           multiplier="-1.0"/>
+    <xacro:mimic_joint name="Revolute_Joint_Pivot_Left"  multiplier="-1.0"/>
+    <xacro:mimic_joint name="Revolute_Joint_Pivot_Right" multiplier="1.0"/>
+  </ros2_control>
+
+</robot>

@@ -1,0 +1,18 @@
+# Bridge configuration between ROS 2 and Gazebo Fortress
+- ros_topic_name: "/clock"
+  gz_topic_name: "/clock"
+  ros_type_name: "rosgraph_msgs/msg/Clock"
+  gz_type_name: "gz.msgs.Clock"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "/world/pendulum_grasp_world/control"
+  gz_topic_name: "/world/pendulum_grasp_world/control"
+  ros_type_name: "ros_gz_interfaces/msg/WorldControl"
+  gz_type_name: "gz.msgs.WorldControl"
+  direction: ROS_TO_GZ
+
+- ros_topic_name: "/world/pendulum_grasp_world/pose/info"
+  gz_topic_name: "/world/pendulum_grasp_world/pose/info"
+  ros_type_name: "tf2_msgs/msg/TFMessage"
+  gz_type_name: "gz.msgs.Pose_V"
+  direction: GZ_TO_ROS

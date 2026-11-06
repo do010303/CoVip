@@ -1,0 +1,11 @@
+>> Da luu hieu chinh Servo 1 vao flash.
+[SERVO 1] pulseMin=590 us | pulseMax=2500 us | adc0=2958 mV | adcMid=1894 mV | adc180=890 mV (wiper)
+
+>> Da luu hieu chinh Servo 2 vao flash.
+[SERVO 2] pulseMin=500 us | pulseMax=2420 us | adc0=306 mV | adcMid=1828 mV | adcMax=3422 mV (wiper)
+
+>> Da luu hieu chinh Servo 3 vao flash.
+[SERVO 3] pulseMin=500 us | pulseMax=2500 us | adc0=362 mV | adcMid=2028 mV | adcMax=3766 mV (wiper)
+
+>> Da luu hieu chinh Servo 4 vao flash.
+[SERVO 4] pulseMin=500 us | pulseMax=2500 us | adc0=340 mV | adcMid=2016 mV | adcMax=3758 mV (wiper)

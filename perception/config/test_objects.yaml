@@ -1,0 +1,56 @@
+# Vật thật dùng để thử perception + gắp (đo tay 2026-10-26). CHỈ để đánh giá
+# (eval_objects.py, sim_objects.py) và kiểm ngón gắp — perception_node KHÔNG
+# đọc file này: nó tự đo kích thước, không cần khai báo.
+#
+# Kích thước mm, theo tư thế ĐẶT TRÊN BÀN lúc thử:
+#   box:      w × d × h   (đặt nằm: mặt lớn nhất úp xuống, h = cạnh nhỏ nhất)
+#   cylinder: D × h       (đứng thẳng)
+# `ghi_chu`: điều có thể làm perception / gắp khó hơn.
+
+# Ngón gắp song song (URDF rl_arm5/.../assarm_description, mô hình giống `baseline_ik_pi4b.py`).
+# Hai ngón chuyển động tịnh tiến (hình bình hành), khoảng cách giữa hai má = 80 mm × cos(q):
+#   q = 0° mở hết = 80 mm; q = 51,3° = 50 mm (khít khối 5 cm, `Q_GRIPPER_CLOSE`); q = 90° = 0.
+# Góc servo (0–90°, firmware ESP32 chặn ở 90°) = q tính bằng độ.
+# TÍNH TỪ HÌNH HỌC URDF/STL, CHƯA ĐO TRÊN TAY THẬT — đo lại độ mở bằng thước khi servo ở 0°.
+gripper:
+  max_open_mm: 80       # độ mở lớn nhất giữa hai má kẹp (q = 0°)
+  pad_width_mm: 18      # bề rộng má theo chiều ngang
+  pad_height_mm: 15     # chiều cao vùng má tiếp xúc (đáy ngón); đầu má thấp hơn trục ngón 65 mm
+  max_load_g: null      # URDF chỉ có mô-men servo (MG995 0,92–1,27 N·m), không có tải gắp — CHƯA ĐO
+
+objects:
+  tru_xanh:
+    shape: cylinder
+    size_mm: [50, 100]
+    mass_g: 32
+    ghi_chu: ống nhựa xanh dương, có gờ nắp; đã đo V2 (lệch xy 2–3 mm, cỡ ≤ 3,4 mm)
+  hop_v2:
+    shape: box
+    size_mm: [85, 55, 40]
+    mass_g: null
+    ghi_chu: hộp giấy dùng trong V2 (lệch xy 9–11 mm, cỡ ≤ 3 mm)
+  hop_giay:
+    shape: box
+    size_mm: [100, 62, 60]
+    mass_g: 119
+    ghi_chu: hộp các-tông nâu, băng keo trong bóng (có thể loá đèn)
+  hop_pin:
+    shape: box
+    size_mm: [160, 61, 50]
+    mass_g: 36
+    ghi_chu: hộp pin OVONIC, đen có in xanh; dài 160 mm — xem có lọt vùng làm việc + ngón gắp
+  lo_nap_do:
+    shape: cylinder
+    size_mm: [41, 81]
+    mass_g: 19
+    ghi_chu: lọ dán giấy vàng, nắp đỏ to hơn thân một chút
+  chai_nho:
+    shape: cylinder
+    size_mm: [30, 122]
+    mass_g: 36
+    ghi_chu: chai trắng nhãn xanh nhạt, có vòi xịt (đầu thon) — không phải trụ đều; trắng trên bàn xám sáng dễ mất
+  chai_lon:
+    shape: cylinder
+    size_mm: [54, 155]
+    mass_g: 275
+    ghi_chu: chai xịt trắng nhãn xanh, vai thon; nặng nhất (275 g) — kiểm tải servo trước khi gắp

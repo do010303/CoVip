@@ -1,0 +1,23 @@
+# ROS 2 build directories
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+
+# Python cache & venv
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+venv*/
+
+# Training logs and checkpoints
+tb_logs/
+models/
+*.zip
+
+# IDE & OS files
+.vscode/
+.idea/
+.DS_Store
+*.swp

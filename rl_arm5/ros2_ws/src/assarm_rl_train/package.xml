@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypeneds="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>assarm_rl_train</name>
+  <version>0.1.0</version>
+  <description>Training pipeline and callbacks for ASSARM RL (SAC).</description>
+  <maintainer email="user@todo.todo">quan</maintainer>
+  <license>MIT</license>
+
+  <exec_depend>assarm_common</exec_depend>
+  <exec_depend>assarm_rl_env</exec_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

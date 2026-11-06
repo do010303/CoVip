@@ -1,0 +1,24 @@
+# Config cho Phase 1 Stage A (Khối đứng yên, Level 0-1)
+stage: "A"
+timesteps: 100000
+spawn_level: 0
+max_steps: 60
+dt: 0.1
+
+sac:
+  policy: "MlpPolicy"
+  net_arch: [256, 256, 256]
+  gamma: 0.98
+  learning_rate: 0.0003
+  batch_size: 256
+  buffer_size: 300000
+  learning_starts: 2000
+  train_freq: 1
+  gradient_steps: 4
+  ent_coef: "auto"
+  target_entropy: -2.0
+
+eval:
+  eval_freq: 5000
+  n_eval_episodes: 20
+  target_handoff_rate: 90.0

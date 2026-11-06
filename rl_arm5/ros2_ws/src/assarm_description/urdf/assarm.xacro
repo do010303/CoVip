@@ -1,0 +1,710 @@
+<?xml version="1.0"?>
+<!-- assarm - URDF/xacro for ROS 2 Humble + Gazebo Harmonic (gz-sim) -->
+<robot name="assarm" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<!-- ===== Tham so co the chinh ===== -->
+<!-- Effort theo datasheet servo that (N.m) -->
+<xacro:property name="effort_j1"      value="1.8"/>    <!-- TD8120MG (1.81-2.23 N.m) -->
+<xacro:property name="effort_j2"      value="1.45"/>   <!-- RDS3120  (1.47-2.06 N.m) -->
+<xacro:property name="effort_j3"      value="0.9"/>    <!-- MG995   (0.92-1.27 N.m) -->
+<xacro:property name="effort_j4"      value="0.9"/>    <!-- MG995   (0.92-1.27 N.m) -->
+<xacro:property name="gripper_effort" value="0.9"/>    <!-- MG995   (0.92-1.27 N.m) -->
+<xacro:property name="joint_velocity" value="3.0"/>   <!-- rad/s -->
+<xacro:property name="joint_damping"  value="0.1"/>
+<xacro:property name="joint_friction" value="0.01"/>
+<!-- Robot gan DUOI UAV, gripper huong XUONG: huong hien tai cua CAD la dung, giu base_roll=0.
+     Khi test rieng (khong co UAV): base co dinh vao world, base cach san 0.557 m, gripper cach san ~0.15 m.
+     Tang base_z de nang ca canh tay len (khong dat am: gripper se chim duoi san).
+     Khi ghep vao UAV: thay world_to_base_joint bang khop fixed tu link UAV toi base_link, xem README. -->
+<xacro:property name="base_z"    value="0.0"/>
+<xacro:property name="base_roll" value="0.0"/>
+
+<xacro:include filename="$(find assarm_description)/urdf/materials.xacro"/>
+<xacro:include filename="$(find assarm_description)/urdf/assarm_ros2_control.xacro"/>
+<xacro:include filename="$(find assarm_description)/urdf/assarm.gazebo"/>
+
+<link name="world"/>
+<joint name="world_to_base_joint" type="fixed">
+  <parent link="world"/>
+  <child link="base_link"/>
+  <origin xyz="0 0 ${base_z}" rpy="${base_roll} 0 0"/>
+</joint>
+
+<link name="base_link">
+  <inertial>
+    <origin xyz="0 0 0.556779" rpy="0 0 0"/>
+    <mass value="0.024005518761463195"/>
+    <inertia ixx="1e-05" iyy="1.6e-05" izz="2.5e-05" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Servo1_1">
+  <inertial>
+    <origin xyz="-0.0039 -0.024164 0.010047" rpy="0 0 0"/>
+    <mass value="0.06403257509717535"/>
+    <inertia ixx="1.7e-05" iyy="1e-05" izz="1.1e-05" ixy="0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.003894 -0.02389 -0.56" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo1_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.003894 -0.02389 -0.56" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo1_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Servo1_Pinion_Gear_1">
+  <inertial>
+    <origin xyz="0 0 -0.035921" rpy="0 0 0"/>
+    <mass value="0.003"/>
+    <inertia ixx="7.07e-08" iyy="7.07e-08" izz="1.36e-07" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.000006 0.010797 -0.580797" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo1_Pinion_Gear_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.000006 0.010797 -0.580797" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo1_Pinion_Gear_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Servo2_1">
+  <inertial>
+    <origin xyz="0.000473 -0.000041 -0.02579" rpy="0 0 0"/>
+    <mass value="0.0800662347147613"/>
+    <inertia ixx="1.5e-05" iyy="2.6e-05" izz="1.6e-05" ixy="-0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.000006 0.010797 -0.54355" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo2_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.000006 0.010797 -0.54355" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo2_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Servo2_BracketU_1">
+  <inertial>
+    <origin xyz="0.0258 0 -0.017356" rpy="0 0 0"/>
+    <mass value="0.011032559217128033"/>
+    <inertia ixx="2e-06" iyy="7e-06" izz="6e-06" ixy="0.0" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.026206 0.010797 -0.50653" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo2_BracketU_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.026206 0.010797 -0.50653" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo2_BracketU_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="PCB_Box_1">
+  <inertial>
+    <origin xyz="-0.022374 -0.028321 -0.001439" rpy="0 0 0"/>
+    <mass value="0.013008493921349134"/>
+    <inertia ixx="9e-06" iyy="7e-06" izz="1.5e-05" ixy="0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.022094 0.018222 -0.533975" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/PCB_Box_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.022094 0.018222 -0.533975" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/PCB_Box_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="PCB_1">
+  <inertial>
+    <origin xyz="0.029049 -0.028319 -0.002938" rpy="0 0 0"/>
+    <mass value="0.03142086957249495"/>
+    <inertia ixx="1.2e-05" iyy="1.1e-05" izz="2.2e-05" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.028839 0.026298 -0.529325" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/PCB_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.028839 0.026298 -0.529325" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/PCB_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Link1_1">
+  <inertial>
+    <origin xyz="0 -0.000076 -0.049575" rpy="0 0 0"/>
+    <mass value="0.024002440604215008"/>
+    <inertia ixx="3e-05" iyy="3e-05" izz="4e-06" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.000406 0.010797 -0.47953" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Link1_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.000406 0.010797 -0.47953" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Link1_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Servo3_BracketM_1">
+  <inertial>
+    <origin xyz="0.010182 -0.024982 -0.007355" rpy="0 0 0"/>
+    <mass value="0.017000185456280625"/>
+    <inertia ixx="6e-06" iyy="4e-06" izz="7e-06" ixy="0.0" iyz="0.0" ixz="1e-06"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.005406 -0.01419 -0.37953" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo3_BracketM_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.005406 -0.01419 -0.37953" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo3_BracketM_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Servo3_1">
+  <inertial>
+    <origin xyz="0.008485 -0.024315 -0.004982" rpy="0 0 0"/>
+    <mass value="0.053059879208595145"/>
+    <inertia ixx="9e-06" iyy="8e-06" izz="1.4e-05" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.013406 -0.01344 -0.36966" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo3_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.013406 -0.01344 -0.36966" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo3_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Servo3_Pinion_Gear_1">
+  <inertial>
+    <origin xyz="-0.000674 0 0" rpy="0 0 0"/>
+    <mass value="0.003"/>
+    <inertia ixx="7.07e-08" iyy="7.07e-08" izz="1.36e-07" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.028906 0.02071 -0.36466" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo3_Pinion_Gear_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.028906 0.02071 -0.36466" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo3_Pinion_Gear_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Servo3_BracketU_1">
+  <inertial>
+    <origin xyz="0.026 0 -0.029125" rpy="0 0 0"/>
+    <mass value="0.02300359200204669"/>
+    <inertia ixx="1e-05" iyy="2.2e-05" izz="1.4e-05" ixy="-0.0" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.030906 0.02071 -0.36466" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo3_BracketU_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.030906 0.02071 -0.36466" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo3_BracketU_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Link2_1">
+  <inertial>
+    <origin xyz="0 0.000109 -0.04004" rpy="0 0 0"/>
+    <mass value="0.024078102548611983"/>
+    <inertia ixx="2.5e-05" iyy="2.3e-05" izz="6e-06" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.004906 0.02071 -0.31466" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Link2_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.004906 0.02071 -0.31466" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Link2_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Servo4_1">
+  <inertial>
+    <origin xyz="0.004982 -0.024315 0.008485" rpy="0 0 0"/>
+    <mass value="0.053059879208595145"/>
+    <inertia ixx="1.4e-05" iyy="8e-06" izz="9e-06" ixy="-0.0" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.009906 -0.00344 -0.21466" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo4_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.009906 -0.00344 -0.21466" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo4_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Servo4_Pinion_Gear_1">
+  <inertial>
+    <origin xyz="0 0 -0.000674" rpy="0 0 0"/>
+    <mass value="0.003"/>
+    <inertia ixx="7.07e-08" iyy="7.07e-08" izz="1.36e-07" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.004906 0.03071 -0.19916" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo4_Pinion_Gear_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.004906 0.03071 -0.19916" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo4_Pinion_Gear_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Plate_1">
+  <inertial>
+    <origin xyz="-0.00074 0.004984 -0.017062" rpy="0 0 0"/>
+    <mass value="0.011995923479278468"/>
+    <inertia ixx="3e-06" iyy="6e-06" izz="4e-06" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.004906 0.03071 -0.19716" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Plate_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.004906 0.03071 -0.19716" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Plate_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Servo5_1">
+  <inertial>
+    <origin xyz="0.025072 -0.052246 0.200142" rpy="0 0 0"/>
+    <mass value="0.053059879208595145"/>
+    <inertia ixx="8e-06" iyy="9e-06" izz="1.4e-05" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.025812 -0.005 0.025" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo5_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.025812 -0.005 0.025" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo5_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Servo5_Pinion_Gear_1">
+  <inertial>
+    <origin xyz="0 0.068479 0" rpy="0 0 0"/>
+    <mass value="0.003"/>
+    <inertia ixx="7.07e-08" iyy="7.07e-08" izz="1.36e-07" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.009094 0.090015 -0.17516" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo5_Pinion_Gear_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.009094 0.090015 -0.17516" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo5_Pinion_Gear_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Servo_Gear_1">
+  <inertial>
+    <origin xyz="0.006595 0.003 0.000395" rpy="0 0 0"/>
+    <mass value="0.002998793120495797"/>
+    <inertia ixx="1e-06" iyy="1e-06" izz="1e-06" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.009094 0.02021 -0.17516" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo_Gear_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.009094 0.02021 -0.17516" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Servo_Gear_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Idol_Gear_1">
+  <inertial>
+    <origin xyz="-0.006453 0.003 0.000407" rpy="0 0 0"/>
+    <mass value="0.0029970567767714884"/>
+    <inertia ixx="1e-06" iyy="1e-06" izz="1e-06" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.018906 0.02021 -0.17516" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Idol_Gear_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.018906 0.02021 -0.17516" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Idol_Gear_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Gripper_Left_1">
+  <inertial>
+    <origin xyz="0.007006 0.003247 -0.028309" rpy="0 0 0"/>
+    <mass value="0.005999452648441966"/>
+    <inertia ixx="2e-06" iyy="2e-06" izz="1e-06" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.058906 0.02021 -0.17516" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Gripper_Left_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.058906 0.02021 -0.17516" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Gripper_Left_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Gripper_Right_1">
+  <inertial>
+    <origin xyz="-0.007006 0.003247 -0.028308" rpy="0 0 0"/>
+    <mass value="0.005999453345727804"/>
+    <inertia ixx="2e-06" iyy="2e-06" izz="1e-06" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.049094 0.02021 -0.175159" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Gripper_Right_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.049094 0.02021 -0.175159" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Gripper_Right_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Pivot_Arm_Left_1">
+  <inertial>
+    <origin xyz="-0.018960 0.003000 0.000075" rpy="0 0 0"/>
+    <mass value="0.001963"/>
+    <inertia ixx="1e-06" iyy="1e-06" izz="1e-06" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.012947 0.020210 -0.155084" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Pivot_Arm_Left_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.012947 0.020210 -0.155084" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Pivot_Arm_Left_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Pivot_Arm_Right_1">
+  <inertial>
+    <origin xyz="0.018959 0.003000 0.000076" rpy="0 0 0"/>
+    <mass value="0.001963"/>
+    <inertia ixx="1e-06" iyy="1e-06" izz="1e-06" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.003135 0.020210 -0.155084" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Pivot_Arm_Right_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.003135 0.020210 -0.155084" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://assarm_description/meshes/Pivot_Arm_Right_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<joint name="Rigid_1" type="fixed">
+  <origin xyz="0.003894 0.02389 0.56" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="Servo1_1"/>
+</joint>
+
+<joint name="Revolute_Joint_1" type="revolute">
+  <origin xyz="-0.0039 -0.034687 0.020797" rpy="0 0 0"/>
+  <parent link="Servo1_1"/>
+  <child link="Servo1_Pinion_Gear_1"/>
+  <axis xyz="0.0 0.0 -1.0"/>
+  <limit lower="-1.570796" upper="1.570796" effort="${effort_j1}" velocity="${joint_velocity}"/>
+  <dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+</joint>
+
+<joint name="Rigid_2" type="fixed">
+  <origin xyz="0 0 -0.037247" rpy="0 0 0"/>
+  <parent link="Servo1_Pinion_Gear_1"/>
+  <child link="Servo2_1"/>
+</joint>
+
+<joint name="Revolute_Joint_2" type="revolute">
+  <origin xyz="-0.0262 0 -0.03702" rpy="0 0 0"/>
+  <parent link="Servo2_1"/>
+  <child link="Servo2_BracketU_1"/>
+  <axis xyz="-1.0 -0.0 0.0"/>
+  <limit lower="-1.570796" upper="1.570796" effort="${effort_j2}" velocity="${joint_velocity}"/>
+  <dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+</joint>
+
+<joint name="Rigid_3" type="fixed">
+  <origin xyz="0.0221 -0.007425 -0.009575" rpy="0 0 0"/>
+  <parent link="Servo2_1"/>
+  <child link="PCB_Box_1"/>
+</joint>
+
+<joint name="Rigid_4" type="fixed">
+  <origin xyz="-0.050933 -0.008076 -0.00465" rpy="0 0 0"/>
+  <parent link="PCB_Box_1"/>
+  <child link="PCB_1"/>
+</joint>
+
+<joint name="Rigid_5" type="fixed">
+  <origin xyz="0.0258 0 -0.027" rpy="0 0 0"/>
+  <parent link="Servo2_BracketU_1"/>
+  <child link="Link1_1"/>
+</joint>
+
+<joint name="Rigid_6" type="fixed">
+  <origin xyz="-0.005 0.024987 -0.1" rpy="0 0 0"/>
+  <parent link="Link1_1"/>
+  <child link="Servo3_BracketM_1"/>
+</joint>
+
+<joint name="Rigid_7" type="fixed">
+  <origin xyz="-0.008 -0.00075 -0.00987" rpy="0 0 0"/>
+  <parent link="Servo3_BracketM_1"/>
+  <child link="Servo3_1"/>
+</joint>
+
+<joint name="Revolute_Joint_3" type="revolute">
+  <origin xyz="-0.0155 -0.03415 -0.005" rpy="0 0 0"/>
+  <parent link="Servo3_1"/>
+  <child link="Servo3_Pinion_Gear_1"/>
+  <axis xyz="-1.0 -0.0 -0.0"/>
+  <limit lower="-1.570796" upper="1.570796" effort="${effort_j3}" velocity="${joint_velocity}"/>
+  <dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+</joint>
+
+<joint name="Rigid_8" type="fixed">
+  <origin xyz="-0.002 0 0" rpy="0 0 0"/>
+  <parent link="Servo3_Pinion_Gear_1"/>
+  <child link="Servo3_BracketU_1"/>
+</joint>
+
+<joint name="Rigid_9" type="fixed">
+  <origin xyz="0.026 0 -0.05" rpy="0 0 0"/>
+  <parent link="Servo3_BracketU_1"/>
+  <child link="Link2_1"/>
+</joint>
+
+<joint name="Rigid_10" type="fixed">
+  <origin xyz="-0.005 0.02415 -0.1" rpy="0 0 0"/>
+  <parent link="Link2_1"/>
+  <child link="Servo4_1"/>
+</joint>
+
+<joint name="Revolute_Joint_4" type="revolute">
+  <origin xyz="0.005 -0.03415 -0.0155" rpy="0 0 0"/>
+  <parent link="Servo4_1"/>
+  <child link="Servo4_Pinion_Gear_1"/>
+  <axis xyz="0.0 0.0 -1.0"/>
+  <limit lower="-1.570796" upper="1.570796" effort="${effort_j4}" velocity="${joint_velocity}"/>
+  <dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+</joint>
+
+<joint name="Rigid_11" type="fixed">
+  <origin xyz="0 0 -0.002" rpy="0 0 0"/>
+  <parent link="Servo4_Pinion_Gear_1"/>
+  <child link="Plate_1"/>
+</joint>
+
+<joint name="Rigid_12" type="fixed">
+  <origin xyz="-0.020906 0.03571 -0.22216" rpy="0 0 0"/>
+  <parent link="Plate_1"/>
+  <child link="Servo5_1"/>
+</joint>
+
+<joint name="Revolute_Joint_Active" type="revolute">
+  <origin xyz="0.034906 -0.095015 0.20016" rpy="0 0 0"/>
+  <parent link="Servo5_1"/>
+  <child link="Servo5_Pinion_Gear_1"/>
+  <axis xyz="-0.0 1.0 0.0"/>
+  <limit lower="0.0" upper="1.570796" effort="${gripper_effort}" velocity="${joint_velocity}"/>
+  <dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+</joint>
+
+<joint name="Rigid_13" type="fixed">
+  <origin xyz="0 0.069805 0" rpy="0 0 0"/>
+  <parent link="Servo5_Pinion_Gear_1"/>
+  <child link="Servo_Gear_1"/>
+</joint>
+
+<joint name="Revolute_Joint_Passive" type="revolute">
+  <origin xyz="-0.014 0.0105 -0.022" rpy="0 0 0"/>
+  <parent link="Plate_1"/>
+  <child link="Idol_Gear_1"/>
+  <axis xyz="0.0 1.0 0.0"/>
+  <limit lower="-1.570796" upper="0.0" effort="${gripper_effort}" velocity="${joint_velocity}"/>
+  <dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+  <mimic joint="Revolute_Joint_Active" multiplier="-1.0" offset="0.0"/>
+</joint>
+
+<joint name="Revolute_Joint_5" type="revolute">
+  <origin xyz="-0.04 0 0" rpy="0 0 0"/>
+  <parent link="Idol_Gear_1"/>
+  <child link="Gripper_Left_1"/>
+  <axis xyz="0.0 1.0 0.0"/>
+  <limit lower="0.0" upper="1.570796" effort="${gripper_effort}" velocity="${joint_velocity}"/>
+  <dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+  <mimic joint="Revolute_Joint_Active" multiplier="1.0" offset="0.0"/>
+</joint>
+
+<joint name="Revolute_Joint_8" type="revolute">
+  <origin xyz="0.04 0 -0.000001" rpy="0 0 0"/>
+  <parent link="Servo_Gear_1"/>
+  <child link="Gripper_Right_1"/>
+  <axis xyz="0.0 1.0 0.0"/>
+  <limit lower="-1.570796" upper="0.0" effort="${gripper_effort}" velocity="${joint_velocity}"/>
+  <dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+  <mimic joint="Revolute_Joint_Active" multiplier="-1.0" offset="0.0"/>
+</joint>
+
+<joint name="Revolute_Joint_Pivot_Left" type="revolute">
+  <origin xyz="-0.008041 0.010500 -0.042076" rpy="0 0 0"/>
+  <parent link="Plate_1"/>
+  <child link="Pivot_Arm_Left_1"/>
+  <axis xyz="0.0 1.0 0.0"/>
+  <limit lower="-1.570796" upper="0.0" effort="${gripper_effort}" velocity="${joint_velocity}"/>
+  <dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+  <mimic joint="Revolute_Joint_Active" multiplier="-1.0" offset="0.0"/>
+</joint>
+
+<joint name="Revolute_Joint_Pivot_Right" type="revolute">
+  <origin xyz="0.008041 0.010500 -0.042076" rpy="0 0 0"/>
+  <parent link="Plate_1"/>
+  <child link="Pivot_Arm_Right_1"/>
+  <axis xyz="0.0 1.0 0.0"/>
+  <limit lower="0.0" upper="1.570796" effort="${gripper_effort}" velocity="${joint_velocity}"/>
+  <dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+  <mimic joint="Revolute_Joint_Active" multiplier="1.0" offset="0.0"/>
+</joint>
+
+</robot>

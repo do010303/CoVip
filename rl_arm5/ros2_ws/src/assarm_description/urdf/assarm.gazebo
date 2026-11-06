@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<robot name="assarm" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Gazebo Harmonic (gz-sim) + ros2_control.
+       Thay cho libgazebo_ros_control.so (chi dung cho Gazebo Classic). -->
+  <gazebo>
+    <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+      <parameters>$(find assarm_description)/config/assarm_controllers.yaml</parameters>
+    </plugin>
+  </gazebo>
+
+  <!-- Ma sat cao cho hai ngam kep de gap vat.
+       Mau sac lay tu <material name="silver"> trong URDF (khong dung Gazebo/Silver cua Classic).
+       Self-collision mac dinh tat trong gz-sim nen khong can khai bao tung link. -->
+  <gazebo reference="Gripper_Left_1">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+  </gazebo>
+  <gazebo reference="Gripper_Right_1">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+  </gazebo>
+
+</robot>

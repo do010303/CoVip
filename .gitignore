@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+# chạy ra
+perception/logs/
+perception/runs/
+perception/datasets/
+perception/calib/chessboard_raw/
+benchmark_*.csv
+# ROS 2 build
+rl_arm5/ros2_ws/build/
+rl_arm5/ros2_ws/install/
+rl_arm5/ros2_ws/log/
+# nặng
+*.pkl
+*.pt

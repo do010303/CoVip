@@ -1,0 +1,207 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+  <world name="pendulum_grasp_world">
+
+    <!-- Physics settings: 1ms step size, 1.0 real time factor -->
+    <physics name="1ms" type="ignored">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <!-- Plugins -->
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"/>
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
+
+    <!-- Sun light -->
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <!-- Ground plane -->
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>10 10</size>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>10 10</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.8 0.8 0.8 1</ambient>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Con lắc: Bệ treo + Dây ngắn 15cm + Khối Trụ tròn tại tâm làm việc X=0.0m, Y=0.28m, Z=0.40m -->
+    <model name="cube_pendulum">
+      <static>true</static>
+      <pose>0.0 0.28 0.575 0 0 0</pose> <!-- Bệ treo tại X=0.0m, Y=0.28m, Z=0.575m (tâm khối trụ Z=0.40m) -->
+
+      <!-- Bệ treo -->
+      <link name="pedestal_top">
+        <pose>0 0 0 0 0 0</pose>
+        <visual name="visual">
+          <geometry>
+            <box><size>0.04 0.04 0.02</size></box>
+          </geometry>
+          <material>
+            <ambient>0.3 0.3 0.3 1</ambient>
+            <diffuse>0.3 0.3 0.3 1</diffuse>
+          </material>
+        </visual>
+      </link>
+
+      <!-- Khớp cầu dây (Ball joint) kết nối bệ treo và dây -->
+      <joint name="rope_ball_joint" type="ball">
+        <parent>pedestal_top</parent>
+        <child>rope_link</child>
+        <pose>0 0 0.075 0 0 0</pose> <!-- Khớp nằm ở đầu trên của dây -->
+        <axis>
+          <dynamics>
+            <damping>0.003</damping>
+            <friction>0.0005</friction>
+          </dynamics>
+        </axis>
+      </joint>
+
+      <!-- Dây treo 12.5 cm (tâm dây tại z=-0.0625m) -->
+      <link name="rope_link">
+        <pose>0 0 -0.0625 0 0 0</pose>
+        <inertial>
+          <mass>0.002</mass>
+          <inertia>
+            <ixx>4.7e-6</ixx><ixy>0</ixy><ixz>0</ixz>
+            <iyy>4.7e-6</iyy><iyz>0</iyz>
+            <izz>1e-7</izz>
+          </inertia>
+        </inertial>
+        <visual name="visual">
+          <geometry>
+            <cylinder><radius>0.0015</radius><length>0.125</length></cylinder>
+          </geometry>
+          <material>
+            <ambient>0.9 0.1 0.1 1</ambient>
+            <diffuse>0.9 0.1 0.1 1</diffuse>
+          </material>
+        </visual>
+      </link>
+
+      <!-- Khớp nối cố định đầu dưới dây với khối trụ -->
+      <joint name="rope_to_cube_joint" type="fixed">
+        <parent>rope_link</parent>
+        <child>cube_link</child>
+        <pose>0 0 -0.0625 0 0 0</pose>
+      </joint>
+
+      <!-- Khối trụ tròn cao gấp đôi 10cm (bán kính r=0.025m, dài l=0.10m, 0.15 kg) tại z=-0.175m (tâm z=0.40m) -->
+      <link name="cube_link">
+        <pose>0 0 -0.175 0 0 0</pose>
+        <inertial>
+          <mass>0.150</mass>
+          <inertia>
+            <ixx>1.48e-4</ixx><ixy>0</ixy><ixz>0</ixz>
+            <iyy>1.48e-4</iyy><iyz>0</iyz>
+            <izz>4.69e-5</izz>
+          </inertia>
+        </inertial>
+        <visual name="visual">
+          <geometry>
+            <cylinder><radius>0.025</radius><length>0.10</length></cylinder>
+          </geometry>
+          <material>
+            <ambient>0.1 0.7 0.2 1</ambient>
+            <diffuse>0.1 0.7 0.2 1</diffuse>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <cylinder><radius>0.025</radius><length>0.10</length></cylinder>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+      </link>
+    </model>
+
+    <!-- Camera CSI gắn trên giá đỡ chữ L (L-Bracket) nâng cao và lùi sau, hoàn toàn không đè động cơ Servo 1 -->
+    <model name="camera_rig">
+      <static>true</static>
+      <!-- Bắt vào bệ base (z=0.56m) và lùi sau y=-0.06m để không chạm Servo 1 -->
+      <pose>0.0 -0.06 0.56 0 0 0</pose>
+
+      <link name="camera_link">
+        <!-- Đế ngang bắt vít vào cạnh sau của Base -->
+        <visual name="bracket_base">
+          <pose>0 0.015 0.005 0 0 0</pose>
+          <geometry>
+            <box><size>0.035 0.03 0.01</size></box>
+          </geometry>
+          <material>
+            <ambient>0.2 0.2 0.22 1</ambient>
+            <diffuse>0.3 0.3 0.35 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Thanh dọc chữ L vươn cao 7cm vượt hẳn qua đỉnh Servo 1 -->
+        <visual name="bracket_arm">
+          <pose>0 0 0.04 0 0 0</pose>
+          <geometry>
+            <box><size>0.015 0.012 0.07</size></box>
+          </geometry>
+          <material>
+            <ambient>0.25 0.25 0.28 1</ambient>
+            <diffuse>0.35 0.35 0.4 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Bo mạch CSI Camera PCB (xanh lá) ở cao độ 0.635m, chúc góc 45 deg (0.785 rad) -->
+        <visual name="camera_pcb">
+          <pose>0 0.01 0.075 0.785 0 0</pose>
+          <geometry>
+            <box><size>0.025 0.024 0.004</size></box>
+          </geometry>
+          <material>
+            <ambient>0.05 0.4 0.15 1</ambient>
+            <diffuse>0.1 0.7 0.25 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Ống kính Camera (Lens đen) hướng xuống vùng kẹp -->
+        <visual name="camera_lens">
+          <pose>0 0.015 0.075 0.785 0 0</pose>
+          <geometry>
+            <cylinder><radius>0.005</radius><length>0.009</length></cylinder>
+          </geometry>
+          <material>
+            <ambient>0.02 0.02 0.02 1</ambient>
+            <diffuse>0.05 0.05 0.05 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+  </world>
+</sdf>

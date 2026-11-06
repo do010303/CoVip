@@ -1,0 +1,68 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100
+    use_sim_time: true
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    gripper_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    arm_position_controller:
+      type: position_controllers/JointGroupPositionController
+
+    gripper_position_controller:
+      type: position_controllers/JointGroupPositionController
+
+arm_controller:
+  ros__parameters:
+    joints:
+      - Revolute_Joint_1
+      - Revolute_Joint_2
+      - Revolute_Joint_3
+      - Revolute_Joint_4
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    state_publish_rate: 50.0
+    action_monitor_rate: 20.0
+    allow_partial_joints_goal: false
+    constraints:
+      stopped_velocity_tolerance: 0.05
+      goal_time: 0.0
+
+gripper_controller:
+  ros__parameters:
+    joints:
+      - Revolute_Joint_Active
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    state_publish_rate: 50.0
+    action_monitor_rate: 20.0
+    allow_partial_joints_goal: false
+    constraints:
+      stopped_velocity_tolerance: 0.05
+      goal_time: 0.0
+
+arm_position_controller:
+  ros__parameters:
+    joints:
+      - Revolute_Joint_1
+      - Revolute_Joint_2
+      - Revolute_Joint_3
+      - Revolute_Joint_4
+
+gripper_position_controller:
+  ros__parameters:
+    joints:
+      - Revolute_Joint_Active
+

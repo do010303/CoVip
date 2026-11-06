@@ -1,0 +1,10 @@
+camera_matrix:
+- [830.5, 0.0, 320.0]
+- [0.0, 830.5, 240.0]
+- [0.0, 0.0, 1.0]
+distortion_coefficients:
+- [0.0, 0.0, 0.0, 0.0, 0.0]
+image_height: 480
+image_width: 640
+is_calibrated: true
+reprojection_error: 0.12
